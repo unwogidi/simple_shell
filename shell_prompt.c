@@ -45,31 +45,42 @@ void read_input(char *input)
 
 	/* Remove the newline character from the input */
 	input[_strcspn(input, "\n")] = 0;
+}
 
-	/* Handle empty input */
-	if (_strcmp(input, "") == 0)
+/**
+ * parse_input - parse input into arguments
+ * @input: input
+ * @argv: pointer to a pointer
+ *
+ * Return: Nothing
+ */
+void parse_input(char *input, char **argv)
+{
+	int i = 0;
+
+	argv[i] = strtok(input, " ");
+	while (argv[i] != NULL)
 	{
-		input[0] = '\0'; /* Ensure the input is an empty string */
+		i++;
+		argv[i] = strtok(NULL, " ");
 	}
 }
 
 
 /**
  * execute_command - executes a command
- * @input: inputs
+ * @argv: pointer to a pointer of a argument
  *
  * Return: Nothing
  */
-void execute_command(char *input)
+void execute_command(char **argv)
 {
-	char *argv[2];
 	pid_t pid = fork();
 
-	if (input[0] == '\0')
+	if (argv[0] == NULL)
+	{
 		return;
-
-	argv[0] = input;
-	argv[1] = NULL;
+	}
 
 	if (pid == 0)
 	{
